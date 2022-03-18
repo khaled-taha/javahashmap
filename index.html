@@ -1,0 +1,1756 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>HashMap and HashTable </title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="fb776575-eb27-4671-a30e-266c1ea6d149" class="page sans"><header><img class="page-cover-image" src="https://images.unsplash.com/photo-1619468129361-605ebea04b44?ixlib=rb-1.2.1&amp;q=85&amp;fm=jpg&amp;crop=entropy&amp;cs=srgb" style="object-position:center 50%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">📖</span></div><h1 class="page-title">HashMap and HashTable </h1></header><div class="page-body"><p id="330c36de-b542-44b7-a868-3a708115651c" class="">By Khaled Taha</p><p id="916eae0e-b4e3-471d-bb51-4502b9ac3707" class="">Facebook: <a href="https://web.facebook.com/profile.php?id=100022168757612">https://web.facebook.com/profile.php?id=100022168757612</a></p><p id="6d4c0f8b-f71c-458f-abcf-12e4cbade3fc" class="">Linkedin: <a href="http://www.linkedin.com/in/khaled-el-attar-3a4031191">www.linkedin.com/in/khaled-el-attar-3a4031191</a></p><p id="ff62eb92-4512-4b03-9e86-ff197d95656c" class="">Gmail: khaledtaha105@gmail.com</p><ul id="148632e0-5030-45b3-b437-7b33832da5e0" class="toggle"><li><details open=""><summary><strong>Index (</strong><mark class="highlight-red"><strong>To quickly go to the section, click on its name in the index</strong></mark><strong>)</strong></summary><ol type="1" id="d6cd4af0-336a-4e34-a7c2-1e4bb33468db" class="numbered-list" start="1"><li>Section 1: <a href="https://www.notion.so/HashMap-and-HashTable-fb776575eb274671a30e266c1ea6d149"><strong><mark class="highlight-red_background">What is Hashing?</mark></strong></a></li></ol><ol type="1" id="aa862980-51bb-4b63-9353-06f1d482d52f" class="numbered-list" start="2"><li>Section 2: <a href="https://www.notion.so/HashMap-and-HashTable-fb776575eb274671a30e266c1ea6d149"><strong><mark class="highlight-red_background">What is hash code?</mark></strong></a></li></ol><ol type="1" id="65c0e058-453a-49f7-a335-40d102f1f0b4" class="numbered-list" start="3"><li>Section 3: <a href="https://www.notion.so/HashMap-and-HashTable-fb776575eb274671a30e266c1ea6d149"><strong><mark class="highlight-red_background">What is HashMap?</mark></strong></a></li></ol><ol type="1" id="3ded54d3-40f4-40d5-8ea6-1ee933738b90" class="numbered-list" start="4"><li>Section 4: <a href="https://www.notion.so/HashMap-and-HashTable-fb776575eb274671a30e266c1ea6d149"><strong><mark class="highlight-red_background">Basic Usage</mark></strong></a></li></ol><ol type="1" id="e866021c-1191-45b0-9828-70ba31f38de1" class="numbered-list" start="5"><li>Section 5:  <a href="https://www.notion.so/HashMap-and-HashTable-fb776575eb274671a30e266c1ea6d149"><mark class="highlight-red_background"><strong><strong>Collection Views in </strong></strong></mark></a><a href="https://www.notion.so/HashMap-and-HashTable-fb776575eb274671a30e266c1ea6d149"><mark class="highlight-red_background"><em><strong><strong>HashMap: </strong></strong></em></mark></a></li></ol><ol type="1" id="ba9add6d-d0c7-45af-b185-21f739dd3e01" class="numbered-list" start="6"><li>Section 6:<a href="https://www.notion.so/HashMap-and-HashTable-fb776575eb274671a30e266c1ea6d149"> </a><a href="https://www.notion.so/HashMap-and-HashTable-fb776575eb274671a30e266c1ea6d149"><mark class="highlight-red_background"><strong>Understand Java ConcurrentModificationException</strong></mark></a></li></ol><ol type="1" id="281849d1-05e6-4c36-ada4-dd319ea310b3" class="numbered-list" start="7"><li>Section 7: <a href="https://www.notion.so/HashMap-and-HashTable-fb776575eb274671a30e266c1ea6d149"><mark class="highlight-red_background"><strong><strong>HashMap Performance</strong></strong></mark></a></li></ol><ol type="1" id="025bbfb9-0b67-49e2-851f-50fd2005b747" class="numbered-list" start="8"><li>Section 8: <a href="https://www.notion.so/HashMap-and-HashTable-fb776575eb274671a30e266c1ea6d149"><mark class="highlight-red_background"><strong><strong>Differences Between </strong></strong></mark></a><a href="https://www.notion.so/HashMap-and-HashTable-fb776575eb274671a30e266c1ea6d149"><mark class="highlight-red_background"><em><strong><strong>Hashtable</strong></strong></em></mark></a><a href="https://www.notion.so/HashMap-and-HashTable-fb776575eb274671a30e266c1ea6d149"><mark class="highlight-red_background"><strong><strong> and </strong></strong></mark></a><a href="https://www.notion.so/HashMap-and-HashTable-fb776575eb274671a30e266c1ea6d149"><mark class="highlight-red_background"><em><strong><strong>HashMap</strong></strong></em></mark></a></li></ol><ol type="1" id="d12228ee-2f9b-49f6-b7d4-9b3ee18efa8f" class="numbered-list" start="9"><li>Section 9: <a href="https://www.notion.so/HashMap-and-HashTable-fb776575eb274671a30e266c1ea6d149"><strong><mark class="highlight-red_background">let’s understand Fail Fast Vs Fail Safe Iterator In Java.</mark></strong></a></li></ol><ol type="1" id="4347ab70-7be0-4563-a7b2-71bb3e6dffe3" class="numbered-list" start="10"><li>Section 10: <a href="https://www.notion.so/HashMap-and-HashTable-fb776575eb274671a30e266c1ea6d149"><mark class="highlight-red_background"><strong>Common Questions</strong></mark></a></li></ol><ol type="1" id="45ad9769-ad4a-42f5-96db-a0f9c39b3dfc" class="numbered-list" start="11"><li><a href="https://www.notion.so/HashMap-and-HashTable-fb776575eb274671a30e266c1ea6d149">References</a></li></ol></details></li></ul><h1 id="7f59adc5-08d2-429b-ada9-e1b879cfc757" class="">Section 1: <mark class="highlight-red_background">What is Hashing?</mark></h1><p id="67264744-7693-4090-b98b-409d3ffd1a57" class="">
+</p><p id="49730ca1-4aa0-4e21-8af6-7af9d903a745" class=""><strong><mark class="highlight-red">Hashing</mark></strong><strong> in its simplest form, is a way to assigning a unique code for any variable/object after applying any formula/algorithm on its properties.</strong></p><p id="05fa8488-aab1-4cbe-8d0b-2ef9de1ac76c" class=""><strong>All objects in Java inherit a default implementation of hashCode() function defined in Object class. This function produces hash code by typically converting the internal address of the object into an integer, thus producing different hash codes for all different objects.</strong></p><p id="7f7b2b3f-21e1-4224-9664-1965f9acbad1" class="">
+</p><p id="6f1aba9b-114c-403c-83f6-b58b3d1865f0" class=""><strong>Any </strong><strong><mark class="highlight-red_background">hashCode()</mark></strong><strong> method should satisfy the following three conditions. These conditions together are also known as the hashCode Contract.</strong></p><ul id="656b51a3-472e-4884-ae14-abb3e8d9784c" class="bulleted-list"><li style="list-style-type:disc"><strong>The</strong><strong><mark class="highlight-red_background"> hashCode()</mark></strong><strong> method must return the same value for a particular object every time, given that we are not changing the implementation of the</strong><strong><mark class="highlight-red_background"> hashCode()</mark></strong><strong> method or the equals() method, and the object is not modified in any way.</strong></li></ul><ul id="d0c87c6e-cafe-43a5-87f3-00923af4d8e3" class="bulleted-list"><li style="list-style-type:disc"><strong>If the equals() method returns true for two objects, then the</strong><strong><mark class="highlight-red_background"> hashCode()</mark></strong><strong> method must return the same hash value for both the objects.</strong></li></ul><ul id="6af18110-7e52-4c74-9ada-150f97bfd773" class="bulleted-list"><li style="list-style-type:disc"><strong>The </strong><strong><mark class="highlight-red_background">hashCode()</mark></strong><strong> can return the same hash value for two objects that are not equal according to the equals() method.</strong></li></ul><p id="0916356b-c874-4837-b4a8-3b9598f78d8e" class="">
+</p><h1 id="87d99125-b6cb-47d2-ba65-08a6d26fc784" class="">Section 2: <mark class="highlight-red_background">What is hash code?</mark></h1><h3 id="8c48b83b-9a5f-4949-8c68-cd7889c7052b" class=""><strong>Hashcode is a unique code generated by the JVM at time of object creation. It can be used to perform some operation on hashing related algorithms like hashtable, hashmap etc. An object can also be searched with this unique code.</strong></h3><p id="eeae0560-bed9-4545-b343-6e566a907adc" class="">
+</p><h1 id="8210728a-7094-4557-a633-a3ba731c465a" class="">Section 3: <mark class="highlight-red_background">What is HashMap?</mark></h1><h3 id="cf10bdc7-9084-421f-b51e-5b73aaa2c97e" class=""><strong>A map is a key-value mapping, which means that every key is mapped to exactly one value and that we can use the key to retrieve the corresponding value from a map.</strong></h3><h3 id="9754bff1-aa5e-4f4d-958b-2122fd9f5266" class=""><strong>One might ask why not simply add the value to a list. Why do we need a </strong><strong><em>HashMap</em></strong><strong>? The simple reason is performance. If we want to find a specific element in a list, the time complexity is </strong><strong><em>O(n)</em></strong><strong> and if the list is sorted, it will be </strong><strong><em>O(log n)</em></strong><strong> using, for example, a binary search.</strong></h3><h3 id="7ffd1243-1bff-4cb4-934d-0d423449597e" class=""><strong>The advantage of a </strong><strong><em>HashMap</em></strong><strong> is that the time complexity to insert and retrieve a value is </strong><strong><em>O(1)</em></strong><strong> on average, and space complexity of </strong><strong><em>O(n)</em></strong></h3><h3 id="5498855c-34d0-450e-b7a3-09c6f44a2ede" class=""><strong><em>HashMap</em></strong><strong> stores elements in so-called buckets and the number of buckets is called </strong><strong><em>capacity</em></strong><strong>.</strong></h3><h3 id="4f44e657-2675-4ad6-b972-aeefaa89646f" class=""><strong>The hash maps store both key and value in the bucket location as a </strong><strong><em>Map.Entry</em></strong><strong> object.</strong></h3><hr id="0936a319-df27-40b7-8e14-8ef7f8a18b4d"/><p id="815ab6a0-b4f2-466b-a385-324730c3763e" class="">
+</p><h1 id="f9c904f9-bd3c-4286-95c2-e88b1c35bf85" class="">Section 4: <mark class="highlight-red_background"><strong>Basic Usage:</strong></mark></h1><h1 id="59737070-a4e0-4146-bdcb-6734cca6b607" class="">1 -<strong> </strong><strong><mark class="highlight-red_background">The put() API</mark></strong><strong>: To store a value in a hash map, we call the put API which takes two parameters; a key and the corresponding value
+</strong></h1><pre id="730aba0a-9241-46db-8f6f-595557aa4dd0" class="code code-wrap"><code>
+header and body: V put(K key, V value) return putVal(hash(key), key, value, false, true);
+
+When a value is added to the map under a key,
+ the hashCode() API of the key object is called to retrieve what is known as the initial hash value.
+
+returned value: return the the previous value associated with the used key and update the previous value
+                if the derived key exists otherwise, it returns null and put a new Entry&lt;key, value&gt;.
+                When put returns null, it could also mean that the previous value associated with the key is null,
+                not necessarily that it&#x27;s a new key-value mapping.
+
+public class MyKey {
+    private int id;
+   
+    @Override
+    public int hashCode() {
+        System.out.println(&quot;Calling hashCode()&quot;);
+        return id;
+    }
+
+    // constructor, setters and getters 
+}
+
+public static void main(String[] args){
+    MyKey key = new MyKey(1);
+    Map&lt;MyKey, String&gt; map = new HashMap&lt;&gt;();
+    map.put(key, &quot;val&quot;);
+}
+
+output: Calling hashCode()
+
+Explanation: 
+When a value is added to the map under a key,
+the hashCode() API of the key object is called to retrieve what is known as the initial hash value.
+Next, the hash() API of the hash map is called internally to compute the final hash value using the initial hash value.
+This final hash value ultimately boils down to an index in the internal array or what we call a bucket location.
+
+Q/ why the key is again used inside this function since we have already used it to compute the hash value?
+
+A/ JDK designers well assumed that there might be some poorly written hashCode() functions
+ that can return very high or low hash code value. To solve this issue,
+ they introduced another hash() function and passed the object’s hash code to this hash() function
+ to bring hash value in the range of array index size.
+
+
+## The hash function of HashMap looks like this:
+
+static final int hash(Object key) {
+    int h;
+    return (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);
+}
+
+## While inside the put function, the final hash value is used like this:
+
+public V put(K key, V value) {
+    return putVal(hash(key), key, value, false, true);
+}
+
+-----&gt; When a null key is encountered during a put operation,
+ it is automatically assigned a final hash value of 0,
+ which means it becomes the first element of the underlying array.
+
+Map&lt;String, String&gt; map = new HashMap&lt;&gt;();
+    map.put(null, null);
+
+
+Q/ How collisions are resolved?
+
+A/ 
+
+1 - A collision, or more specifically, a hash code collision in a HashMap,
+ is a situation where two or more key objects produce the same final hash value and hence point to the same bucket location or array index.
+--&gt; This scenario can occur because according to the equals and hashCode contract, two unequal objects in Java can have the same hash code.
+--&gt; It can also happen because of the finite size of the underlying array, that is, before resizing. The smaller this array,
+    the higher the chances of collision.
+
+public class MyKey {
+
+    private int id;
+    private String name;
+
+    public MyKey(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public int hashCode() {
+        System.out.println(&quot;Calling hashCode()&quot;);
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        System.out.println(&quot;Calling equals() for key: &quot; + obj);
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MyKey other = (MyKey) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;MyKey{&quot; + &quot;id=&quot; + id + &quot;, name=&quot; + name + &#x27;}&#x27;;
+    }
+    
+    
+ 
+
+    public static void main(String[] args) {
+        HashMap&lt;MyKey, String&gt; map = new HashMap&lt;&gt;();
+        MyKey k1 = new MyKey(1, &quot;firstKey&quot;);
+        MyKey k2 = new MyKey(2, &quot;secondKey&quot;);
+        MyKey k3 = new MyKey(2, &quot;thirdKey&quot;);
+
+        System.out.println(&quot;storing value for k1&quot;);
+        map.put(k1, &quot;firstValue&quot;);
+        System.out.println(&quot;storing value for k2&quot;);
+        map.put(k2, &quot;secondValue&quot;);
+        System.out.println(&quot;storing value for k3&quot;);
+        map.put(k3, &quot;thirdValue&quot;);
+
+        map.forEach((k, v) -&gt; System.out.println(v));
+
+    }
+}
+
+run:
+storing value for k1
+Calling hashCode()
+storing value for k2
+Calling hashCode()
+storing value for k3
+Calling hashCode()
+Calling equals() for key: MyKey{id=2, name=secondKey}
+firstValue
+thirdValue
+
+Explanation:
+---&gt; Keep in mind that it&#x27;s the hash value of the key that determines the bucket the object will be stored in.
+     And so, if the hash codes of any two keys collide, their entries will still be stored in the same bucket.
+
+By default, the implementation uses a linked list as the bucket implementation.
+HashMap calls equals method on key object for each entry object.
+All these entry objects in linkedlist will have similar hashcode but equals() method will test for true equality.
+If key.equals(k) will be true then both keys are treated as same key object.
+This will cause the replacing of value object inside entry object only.
+## so the output of the above forEach is:  firstValue and thirdValue. (Look at the next question to understand this output)
+
+---&gt; The initially constant time O(1) put and get operations will occur in linear time O(n) in the case of a collision.
+     This is because after finding the bucket location with the final hash value,
+     each of the keys at this location will be compared with the provided key object using the equals API.</code></pre><p id="3a033b35-3f30-41ac-86a0-5b7269bfcffc" class="">
+</p><h1 id="cace95b6-5e53-44f8-8f69-f708ca3257d0" class=""><mark class="highlight-red"><strong>Why to Override equals(Object) and hashCode() method ?</strong></mark></h1><pre id="aa5d4cee-a009-4e5e-84b7-b6efb13255d6" class="code code-wrap"><code>Case 1: Overriding both equals(Object) and hashCode() method:
+        
+we must override hashCode() in every class, only that we want to use as map keys, not for classes that are only used as values in a map,
+         that overrides equals(). Failure to do so will result in a violation of the general contract for Object.hashCode(),
+         which will prevent your class from functioning properly in conjunction with all hash-based collections,
+         including HashMap, HashSet, and Hashtable. (-Joshua Bloch).
+
+
+import java.util.HashMap;
+
+public class MyKey {
+
+    private int id;
+    private String name;
+
+    public MyKey(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public int hashCode() {
+        System.out.println(&quot;Calling hashCode()&quot;);
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        System.out.println(&quot;Calling equals() for key: &quot; + obj);
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MyKey other = (MyKey) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;MyKey{&quot; + &quot;id=&quot; + id + &quot;, name=&quot; + name + &#x27;}&#x27;;
+    }
+    
+    
+ 
+
+    public static void main(String[] args) {
+        HashMap&lt;MyKey, String&gt; map = new HashMap&lt;&gt;();
+        MyKey k1 = new MyKey(1, &quot;firstKey&quot;);
+        MyKey k2 = new MyKey(1, &quot;firstKey&quot;);
+        map.put(k1, &quot;K1&quot;);
+        map.put(k2, &quot;K2&quot;);
+        map.forEach((k, v) -&gt; System.out.println(v));
+    }
+}
+
+run:
+Calling hashCode()
+Calling hashCode()
+Calling equals() for key: MyKey{id=1, name=firstKey}
+K2
+
+
+Explanation:
+When we call  map.put(k1, &quot;K1&quot;); it will hash to some bucket location,
+and when we call  map.put(k2, &quot;K2&quot;);, it will generates same hashcode value (same as k1)
+and replace first value by second value because while iterating over same bucket,
+it found a key such that key.equals(k2) is true, means searching key already exist.
+ So, it replaces old value of that key by new value.
+*****************************************************************************</code></pre><p id="3691198a-8288-4489-8d6d-1689888c5336" class="">
+</p><pre id="6b8c2a33-fe67-4566-8400-263006978047" class="code code-wrap"><code>Case 2 : Overriding only the equals(Object) method:
+
+import java.util.HashMap;
+
+public class MyKey {
+
+    private int id;
+    private String name;
+
+    public MyKey(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        System.out.println(&quot;Calling equals() for key: &quot; + obj);
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MyKey other = (MyKey) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;MyKey{&quot; + &quot;id=&quot; + id + &quot;, name=&quot; + name + &#x27;}&#x27;;
+    }
+    
+    
+ 
+
+    public static void main(String[] args) {
+        HashMap&lt;MyKey, String&gt; map = new HashMap&lt;&gt;();
+        MyKey g1 = new MyKey(1, &quot;firstKey&quot;);
+        MyKey g2 = new MyKey(1, &quot;firstKey&quot;);
+        map.put(g1, &quot;CSE&quot;);
+        map.put(g2, &quot;IT&quot;);
+        map.forEach((k, v) -&gt; System.out.println(v));
+    }
+}
+
+
+run:
+CSE
+IT
+
+Explanation:
+If we only override equals(Object) method, when we call map.put(k1, &quot;K1&quot;);
+it will hash to some bucket location and when we call map.put(k2, &quot;K2&quot;);
+it will hash to some other bucket location because of different hashcode value
+as hashCode() method has not been overridden.
+</code></pre><figure id="7575522b-b2d6-4709-8cd2-9f4cbd563706" class="image"><a href="https://drive.google.com/file/d/1dZ1C2LHinuhNtCOhhCadOAnU20yi4L-2/view?usp=sharing"><img style="width:672px" src="case1.png"/></a></figure><pre id="1d0d1dca-a4e5-4466-8593-bb1ee38c756b" class="code code-wrap"><code>Case 3: Overriding only hashCode() method:
+
+import java.util.HashMap;
+
+public class MyKey {
+
+    private int id;
+    private String name;
+
+    public MyKey(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    @Override
+    public int hashCode(){
+        return this.id;
+    }
+    
+
+    @Override
+    public String toString() {
+        return &quot;MyKey{&quot; + &quot;id=&quot; + id + &quot;, name=&quot; + name + &#x27;}&#x27;;
+    }
+    public static void main(String[] args) {
+        HashMap&lt;MyKey, String&gt; map = new HashMap&lt;&gt;();
+        MyKey g1 = new MyKey(1, &quot;firstKey&quot;);
+        MyKey g2 = new MyKey(1, &quot;firstKey&quot;);
+        map.put(g1, &quot;CSE&quot;);
+        map.put(g2, &quot;IT&quot;);
+        map.forEach((k, v) -&gt; System.out.println(v));
+    }
+}
+
+run:
+CSE
+IT
+
+Explanation:
+When we call map.put(g1, &quot;CSE&quot;); it will generate hashcode value and stores it to the bucket location
+that is specified with this address (hashcode value).
+And when we call map.put(g2, &quot;IT&quot;) it generates same hashcode value as previous entry
+since key objects are sameand hashCode() method has been overridden.
+So it should replace first with second as per rule. But it didn’t.
+Reason is, when it iterate through that bucket and seeks to find key such that key.equals(g1) i.e.
+if searching key already exist. But it fails to find because equals(Object) method has not been overridden.
+It is violation of rule of hashing.</code></pre><figure id="3d849358-eabe-4be6-9545-33637d976b1c" class="image"><a href="https://drive.google.com/file/d/11Q6qw0WNMRcxyAfqKONjjddaijv9N_tS/view?usp=sharing"><img style="width:688px" src="case2.png"/></a></figure><h1 id="d1fd43f0-454e-45dc-8c49-6e2ac15836c6" class=""><mark class="highlight-red_background">Final Note:</mark></h1><h2 id="9ca77b3e-98b5-431f-8b29-3243c68f5f53" class=""><strong>1 - </strong><strong><mark class="highlight-red">Optimizing HashMap’s Performance</mark></strong></h2><h3 id="b42826b1-8eb4-446c-9feb-409d83824011" class=""><strong>From </strong><mark class="highlight-red_background"><strong>Java 8</strong></mark><strong>, the linked lists are dynamically replaced with balanced binary search trees in collision resolution after the number of collisions in a given bucket location</strong></h3><h3 id="8644ba91-2379-4acc-b25b-f9306e6e8db6" class=""><strong> exceed a certain threshold </strong>(<mark class="highlight-yellow_background"><strong>static final int currently: TREEIFY_THRESHOLD = 8</strong></mark><strong>   ——&gt;   </strong><mark class="highlight-red"><strong>if a bucket contains 8 or more values</strong></mark><strong>), and it&#x27;s changed back to a list if, at some point, only 6 values are left in the bucket </strong><mark class="highlight-yellow_background"><strong>(static final int UNTREEIFY_THRESHOLD = 6</strong></mark><strong>).</strong></h3><h3 id="8908a0e0-ae42-4ec8-ad69-0a78741d5bb8" class=""><mark class="highlight-pink_background"><strong>This change offers a performance boost, since, in the case of a collision, storage and retrieval happen in </strong></mark><mark class="highlight-pink_background"><strong><em>O(log n).</em></strong></mark></h3><h3 id="99c067b6-d2d3-4a01-b859-de5073da4086" class="">That&#x27;s a nice and automatic solution, but it&#x27;s not perfect. <em>O(log(n))  </em>is still worse than desired constant time, and transforming and storing trees takes additional power and memory.</h3><p id="88543c5e-0142-464e-93f8-ccdf516f69a3" class="">
+</p><h2 id="c15b4bc7-ba97-4242-8cce-3acfd3494192" class="">2 - <mark class="highlight-red">When we pass the reference of any data type for any value in Put() Method: the HashMap stores a copy of the actual value not the value stored in the reference variable.</mark></h2><pre id="4cbf24dd-3ca2-4ebb-9484-a72c278a7896" class="code code-wrap"><code>public static void main(String[] args) {
+        Map&lt;Student, Integer&gt; list = new HashMap&lt;&gt;();
+        Student st1 = new Student(&quot;Khaled&quot;);
+        list.put(st1, 1000);
+        list.put(null, 2000);
+        
+        st1 = null; // It won&#x27;t affect anything
+        // Here is the guide
+        System.out.println(list.get(new Student(&quot;Khaled&quot;)));
+        
+        
+        for(Student st : list.keySet()){
+            System.out.println(&quot;name: &quot; + (st != null ? st.getName() : null) +
+                               &quot; , mark = &quot; + list.get(st));
+        }
+    }
+
+run:
+1000
+name: null , mark = 2000
+name: Khaled , mark = 1000</code></pre><p id="e5e54595-0b55-489a-85fc-6d09b6d44c96" class="">
+</p><h2 id="eae5dfee-7414-431b-a413-c08fc938567b" class="">3 - <mark class="highlight-red"><strong><strong>Other Hash Functions</strong></strong></mark></h2><h3 id="5a67d767-ef80-4667-9211-c9b1c69e8af4" class="">There are many hash functions that provide a lesser collision chance than the one described earlier. The problem is that they&#x27;re computationally heavier and thus don&#x27;t provide the speed gain we seek.</h3><h3 id="86ba7a2f-e518-4459-bc95-d99036108f1f" class="">If for some reason we really need quality and don&#x27;t care much for speed, we can take a look at the <mark class="highlight-red"><em>Hashing</em></mark> class from the <a href="https://www.baeldung.com/guava-guide">Guava</a> library:</h3><pre id="53155db3-4af2-4fea-9266-058022fb3345" class="code code-wrap"><code>@Override
+public int hashCode() {
+    HashFunction hashFunction = Hashing.murmur3_32();
+    return hashFunction.newHasher()
+      .putInt(id)
+      .putString(name, Charsets.UTF_8)
+      .hash().hashCode();
+}
+
+It&#x27;s important to choose a 32-bit function because we can&#x27;t store longer hashes anyway.</code></pre><p id="f6dbfe36-a625-414e-aee9-8041890f8068" class="">
+</p><hr id="65c06286-2787-4ad7-bc79-22ed11b9dfb8"/><h1 id="0687cc92-c268-49d8-b4f4-3e7f3a52216f" class="">2 - <mark class="highlight-red_background"><strong><strong>The </strong></strong></mark><mark class="highlight-red_background"><em><strong><strong>get</strong></strong></em></mark><mark class="highlight-red_background"><strong><strong> API: </strong></strong></mark><strong><strong> To retrieve an object already stored in the hash map.</strong></strong></h1><p id="267a4153-c662-42e1-95ec-66821f8746f3" class=""><strong><em>The </em></strong><strong><mark class="highlight-red_background"><em>hashCode() </em></mark></strong><strong>API of the key object is called to obtain the initial hash value.</strong></p><p id="a96db6b9-843c-437f-af7e-4ffc575facd1" class=""><strong>So, The value passed to get method is then rehashed by calling the internal </strong><strong><em>hash()</em></strong><strong>API to obtain the final hash value.</strong></p><p id="35ca66eb-bdf9-4079-9fec-66a07d0d5f7e" class="">
+</p><pre id="fdaf7cc0-ac61-44fc-89eb-d612460e6372" class="code code-wrap"><code>import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
+public class MyKey {
+
+    private int id;
+    private String name;
+
+    public MyKey(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public int hashCode() {
+        System.out.println(&quot;HashCode()&quot;);
+        return this.id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        System.out.println(&quot;equals()&quot;);
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MyKey other = (MyKey) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;MyKey{&quot; + &quot;id=&quot; + id + &quot;, name=&quot; + name + &#x27;}&#x27;;
+    }
+
+    public static void main(String[] args) {
+        MyKey key1 = new MyKey(1, &quot;value1&quot;);
+        MyKey key2 = new MyKey(2, &quot;value2&quot;);
+        MyKey key3 = new MyKey(3, &quot;value3&quot;);
+        Map&lt;MyKey, String&gt; map = new HashMap&lt;&gt;();
+        map.put(key1, &quot;val&quot;); // call hashCode() of the object (key1)
+        map.put(key2, null); // call hashCode() of the object (key2)
+        map.put(null, &quot;val2&quot;); // there is no object to call hashCode() function
+        
+        String value1 = map.get(key1); // call hashCode() of the object (key1)
+        String value2 = map.get(key2); // call hashCode() of the object (key2)
+        String value3 = map.get(null); // there is no object to call hashCode() function
+        String value4 = map.get(key3); 
+        // call hashCode() of the object (key3)
+        /*
+        The generated hash code does not exist. 
+        So, the get method will generate nul
+        */
+        
+        System.out.println(&quot;The value of the key (key1): &quot;           + value1);
+        System.out.println(&quot;The value of the key (key2): &quot;           + value2);
+        System.out.println(&quot;The value of the key (null): &quot;           + value3);
+        System.out.println(&quot;The value of the not added key (val): &quot;  + value4);
+    }
+}
+
+run:
+HashCode()
+HashCode()
+HashCode()
+HashCode()
+HashCode()
+The value of the key (key1): val
+The value of the key (key2): null
+The value of the key (null): val2
+The value of the not added key (val): null</code></pre><p id="d0e0e147-cba1-42a1-b8d5-784c69dd2744" class="">
+</p><h1 id="a612ed64-897a-4a9d-aa74-b791275fb6c2" class=""><mark class="highlight-red"><strong>Important Note:</strong></mark></h1><h3 id="744669fc-588a-4df2-afac-a5e2bc9fc58f" class="">1 - When the returned value is null, it could mean that the key object is not associated with any value in the hash map, Or it could simply mean that the key was explicitly mapped to a null instance.</h3><p id="06d921cf-a241-4415-a97c-f4c0e0f443e6" class="">
+</p><h3 id="2343b172-83bc-4466-a3c7-480e91393ba4" class="">2 - <strong><strong>Keys&#x27; Immutability:</strong></strong></h3><h3 id="88b37310-a6ae-479b-8486-9494aa7d895e" class=""><strong>In most cases, we should use immutable keys. Or at least, we must be aware of the consequences of using mutable keys.</strong></h3><p id="53871987-b903-40ab-8c41-af520928f16d" class="">
+</p><pre id="bcf86e73-2598-43dc-9bb9-7eff23f9bb6a" class="code code-wrap"><code>public static void main(String[] args) {
+        Map&lt;MyKey, String&gt; map = new HashMap&lt;&gt;();
+        MyKey k = new MyKey(1, &quot;key1&quot;);
+        map.put(k, &quot;value 1&quot;);
+        System.out.println(map.get(k));
+        
+        k.setId(2);
+        System.out.println(map.get(k));
+    }
+
+run:
+value 1
+null
+
+Explanation:
+As we can see, we&#x27;re no longer able to get the corresponding value once the key has changed, instead, null is returned. This is because HashMap is searching
+in the wrong bucket.
+
+So, Why String, Integer, and other wrapper classes are considered good keys?
+A/ 
+
+String, Integer, and other wrapper classes are natural candidates of the HashMap key,
+and String is the most frequently used key as well because String is 
+immutable and final, and overrides equals and hashcode() method.
+Other wrapper class also shares similar property. 
+
+Immutability is required, in order to prevent changes on fields used to calculate hashCode()
+because if a key object returns different hashCode during 
+insertion and retrieval then it won&#x27;t be possible to get an object from HashMap. 
+
+Immutability is best as it offers other advantages as well like thread-safety,
+If you can keep your hashCode the same by only making certain fields final, 
+then you go for that as well. 
+
+Since the equals() and hashCode() method is used during retrieval of value objects from HashMap,
+it&#x27;s important that key objects correctly override these methods and follow contact.
+If an unequal object returns different hashcode then the chances of collision
+will be less which subsequently improves the performance of HashMap.</code></pre><hr id="21fe2adc-0fac-412a-bcd7-314a273448b4"/><h1 id="3825924c-220a-4dc6-8548-0ec40b5feec0" class="">3 - <mark class="highlight-red">remove()</mark>,  <mark class="highlight-pink">containsKey()</mark>, <mark class="highlight-purple">containsValue()</mark>, <mark class="highlight-blue">getOrDefault()</mark>, <mark class="highlight-teal">putIfAbsent()</mark>, <mark class="highlight-yellow">BiFunction class and merge()</mark>, <mark class="highlight-orange">and iteration techniques.</mark></h1><p id="807bef2c-059d-4047-b581-15177f346948" class="">
+</p><pre id="6d961de7-1841-4a8b-908c-9dc529c3b001" class="code code-wrap"><code>import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.BiFunction;
+
+public class Student {
+
+    String name;
+    int id;
+    double garde;
+    
+
+    public Student(String name) {
+        this.name = name;
+    }
+
+    
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public double getGarde() {
+        return garde;
+    }
+
+    public void setGarde(double garde) {
+        this.garde = garde;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;Student{&quot; + &quot;name=&quot; + name + &#x27;}&#x27;;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 19 * hash + Objects.hashCode(this.name);
+        hash = 19 * hash + this.id;
+        hash = 19 * hash + (int) (Double.doubleToLongBits(this.garde) ^ (Double.doubleToLongBits(this.garde) &gt;&gt;&gt; 32));
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Student other = (Student) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.garde) != Double.doubleToLongBits(other.garde)) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
+    
+    public static void main(String[] args) {
+        Map&lt;Student, Integer&gt; list = new HashMap&lt;&gt;();
+        Student st1 = new Student(&quot;Khaled&quot;);
+        // add key and its value
+        list.put(st1, 1000);
+        
+        // get value by its key
+        Integer mark = list.get(st1);
+        
+        // Null as the Key: HashMap,not HashTable, allows us to have null as a key
+        list.put(null, 2000);
+        
+        
+        // Remove a Value
+          list.remove(st1);
+        
+        // Check If a Key or Value Exists in the Map
+        list.containsKey(st1); // O(1): call the hashCode() Method
+        list.containsValue(1000); // O(n)
+        
+        // Iterating Over a HashMap
+        // Method 1
+        
+        System.out.println(&quot;Method 1 for iteration&quot;);
+        for(Student st : list.keySet()){
+            System.out.println(&quot;name: &quot; + (st != null ? st.getName() : null) +
+                               &quot; , mark = &quot; + list.get(st));
+        }
+        
+        // Method 2
+        System.out.println(&quot;Method 2 for iteration&quot;);
+        for(Map.Entry&lt;Student, Integer&gt; entry : list.entrySet()){
+            Student st = entry.getKey();
+            System.out.println(&quot;name: &quot; + (st != null ? st.getName() : null) + 
+                    &quot;, mark = &quot; + entry.getValue());
+        }
+        
+        // Method 3
+        System.out.println(&quot;Method 3 for iteration&quot;);
+        list.forEach((key, value) -&gt; {
+            System.out.println(&quot;name: &quot; + (key != null ? key.getName() : null) + 
+                    &quot;, mark = &quot; + value);
+        });
+        
+        // Method 4: there is an important note on this method that i will explain it later.
+        Iterator it = list.keySet().iterator();
+        System.out.println(&quot;Method 4 for iteration&quot;);
+        while(it.hasNext()){
+            Student st = (Student) it.next();
+            mark = list.get(st);
+            System.out.println(&quot;name: &quot; + (st != null ? st.getName() : null) + 
+                    &quot;, mark = &quot; + mark);
+        }
+        //**********************************
+        // getOrDefault(): Using the getOrDefault() method, we can get a value from the map
+        //or return a default element in case there is no mapping for the given key:
+        
+        Integer mark2 = list.getOrDefault(null, 3000);
+        System.out.println(mark2); // 2000
+        
+        // Prior to Java 8:
+        mark2 = (list.containsKey(null)) ? list.get(null) : 3000;
+        System.out.println(mark2); // 2000
+        
+        // putIfAbsent(): we can add a new mapping,
+        //but only if there is not yet a mapping for the given key
+        
+        list.putIfAbsent(null, 5000);
+        System.out.println(list.get(null)); // 2000
+        
+        list.putIfAbsent(st1, 5000);
+        System.out.println(list.get(st1)); // 5000
+        
+        
+        // merge(): accepts three parameters: 
+        //the key, a default value to add to the map if the key doesn&#x27;t exist yet,
+        //and a BiFunction for the remapping.
+        
+        Map&lt;Student, Integer&gt; list2 = new HashMap&lt;&gt;();
+        Student st3 = new Student(&quot;Mohamed&quot;);
+        Student st4 = new Student(&quot;Ahmed&quot;);
+        list2.put(st3, 5000);
+        list2.put(st4, 3500);
+        //Entries with duplicate keys have been merged into one entry.(key from list &amp; second value of list2)
+        list2.put(st1, 2800);
+        
+        Map&lt;Student, Integer&gt; mergeList = new HashMap&lt;&gt;(list);
+        BiFunction&lt;Integer, Integer, Integer&gt; f = (v1, v2) -&gt; v1;
+                
+        list2.forEach((key, value)-&gt;
+        mergeList.merge(key, value, f)
+        );
+        
+        mergeList.forEach((key, value) -&gt; {
+            System.out.println(&quot;name: &quot; + (key != null ? key.getName() : null) + 
+                    &quot;, mark = &quot; + value);
+        });
+        
+        /**
+         * output:  BiFunction&lt;Integer, Integer, Integer&gt; f = (key, value) -&gt; value;
+         * name: Ahmed, mark = 3500
+           name: null, mark = 2000
+           name: Mohamed, mark = 5000
+           name: Khaled, mark = 2800
+           * 
+           * *********************
+           * output:BiFunction&lt;Integer, Integer, Integer&gt; f = (key, value) -&gt; key;
+           * name: Ahmed, mark = 3500
+             name: null, mark = 2000
+             name: Mohamed, mark = 5000
+             name: Khaled, mark = 5000
+         */
+    }
+}
+
+
+run:
+Method 1 for iteration
+name: null , mark = 2000
+Method 2 for iteration
+name: null, mark = 2000
+Method 3 for iteration
+name: null, mark = 2000
+Method 4 for iteration
+name: null, mark = 2000
+2000
+2000
+2000
+5000
+name: Ahmed, mark = 3500
+name: null, mark = 2000
+name: Mohamed, mark = 5000
+name: Khaled, mark = 5000</code></pre><hr id="a7e5cefe-93f1-4b5a-bd9c-2cd93b99701b"/><h1 id="9892762d-e241-4b33-a4ad-b06a90e1623d" class="">Section 5: <mark class="highlight-red_background"><strong><strong>Collection Views in </strong></strong></mark><mark class="highlight-red_background"><em><strong><strong>HashMap: </strong></strong></em></mark></h1><h2 id="d8b10662-fde1-46c0-9c4f-481b2be11522" class=""><em>HashMap </em>offers <mark class="highlight-red"><strong>three</strong></mark> views that enable us to treat its keys and values as another collection.</h2><pre id="f0bf086b-b0b8-43e2-9ef3-49e5bb93302c" class="code code-wrap"><code>        MyKey key1 = new MyKey(1, &quot;value1&quot;);
+        MyKey key2 = new MyKey(2, &quot;value2&quot;);
+        MyKey key3 = new MyKey(3, &quot;value3&quot;);
+        Map&lt;MyKey, String&gt; map = new HashMap&lt;&gt;();
+        map.put(key1, &quot;val1&quot;);
+        map.put(key2, &quot;val2&quot;);
+        map.put(key3, &quot;val3&quot;);</code></pre><h2 id="81d0dbfe-c49b-4e6c-aa99-a979844db77f" class="">1 - We can get a set of all <strong>keys of the map.</strong></h2><pre id="daa3b0f3-dfe6-4a7d-a0e9-90dfdbe9444c" class="code code-wrap"><code>Set&lt;MyKey&gt; keys = map.keySet();
+
+keys.forEach(key -&gt; {
+            System.out.println(map.get(key));
+        });
+
+run:
+
+val1
+val2
+val3</code></pre><h2 id="d7133bba-9a03-487a-9358-d9b62c5a35c6" class="">2 - We can also obtain a <strong>collection view of the values.</strong></h2><pre id="f703e64b-0122-4760-ab9b-920e8ba0bf87" class="code code-wrap"><code>Collection&lt;String&gt; values = map.values();
+
+values.forEach(value -&gt; {
+            System.out.println(value);
+        });
+
+
+run:
+
+val1
+val2
+val3</code></pre><h2 id="26ca6750-72ad-43c4-a7f8-084bfb06e2f7" class="">3 - we can obtain a <strong>set view of all entries </strong>in the map.</h2><pre id="4b75e781-179a-4a7b-b060-5d3e7dd9fc19" class="code code-wrap"><code>Set&lt;Entry&lt;MyKey, String&gt;&gt; entries = map.entrySet();
+
+entries.forEach(entry -&gt; {
+            System.out.println(entry.getKey() + &quot; \t value: &quot; + entry.getValue());
+        });
+
+
+run:
+
+MyKey{id=1, name=value1} 	 value: val1
+MyKey{id=2, name=value2} 	 value: val2
+MyKey{id=3, name=value3} 	 value: val3</code></pre><h1 id="50c99080-1b60-45d9-8e8d-d87866c80ef6" class=""><mark class="highlight-red_background">Important note:  </mark>the <strong>iterators for all the above views are</strong><mark class="highlight-red"><strong> </strong></mark><mark class="highlight-red"><em><strong>fail-fast.</strong></em></mark></h1><h2 id="cf20723c-2e7d-4d52-963e-00f8ad6a44ee" class="">If any structural modification is made on the map, after the iterator has been created or during iteration process <mark class="highlight-pink_background">by iterator or forEach</mark>, a concurrent modification exception will be thrown:</h2><pre id="b4fea3e2-98d5-4b7d-9244-3cbb48d94ca9" class="code code-wrap"><code>1 - After the iterator has been created:
+
+public static void main(String[] args) {
+        Map&lt;String, String&gt; map = new HashMap&lt;&gt;();
+        map.put(&quot;name&quot;, &quot;baeldung&quot;);
+        map.put(&quot;type&quot;, &quot;blog&quot;);
+
+        Set&lt;String&gt; keys = map.keySet();
+        Iterator&lt;String&gt; it = keys.iterator();
+        map.remove(&quot;type&quot;);
+        while (it.hasNext()) {
+            String key = it.next();
+        }
+    }
+}
+
+output: Exception in thread &quot;main&quot; java.util.ConcurrentModificationException
+****************************************************************************
+
+2 - during iteration process
+
+public static void main(String[] args) {
+        Map&lt;String, String&gt; map = new HashMap&lt;&gt;();
+        map.put(&quot;name&quot;, &quot;baeldung&quot;);
+        map.put(&quot;type&quot;, &quot;blog&quot;);
+
+        Set&lt;String&gt; keys = map.keySet();
+        Iterator&lt;String&gt; it = keys.iterator();
+
+        while (it.hasNext()) {
+            String key = it.next();
+            if(key.equals(&quot;name&quot;)) map.remove(key);
+        }
+        map.forEach((k, v) -&gt; System.out.println(v));
+    }
+
+output: Exception in thread &quot;main&quot; java.util.ConcurrentModificationException
+</code></pre><h2 id="8b38a588-abdb-42fa-85d5-2e08fe4be337" class=""><mark class="highlight-red_background"><strong>The only allowed structural modification is a </strong></mark><mark class="highlight-red_background"><strong><em>remove </em></strong></mark><mark class="highlight-red_background"><strong>operation performed by the iterator itself:</strong></mark></h2><pre id="e6d8de61-2c82-4f0a-b202-a7dc30fdf5ef" class="code code-wrap"><code>public static void main(String[] args) {
+        Map&lt;String, String&gt; map = new HashMap&lt;&gt;();
+        map.put(&quot;name&quot;, &quot;baeldung&quot;);
+        map.put(&quot;type&quot;, &quot;blog&quot;);
+
+        Set&lt;String&gt; keys = map.keySet();
+        Iterator&lt;String&gt; it = keys.iterator();
+
+        while (it.hasNext()) {
+            String key = it.next();
+            if(key.equals(&quot;name&quot;)) it.remove(); // remove by iterator not the reference of the map.
+        }
+        map.forEach((k, v) -&gt; System.out.println(v));
+    }
+
+run:
+blog</code></pre><h1 id="3079c3a0-f0d7-4cce-9dff-c1e6d0ccba1e" class="">Section 6: <mark class="highlight-red_background"><strong>Understand Java ConcurrentModificationException:</strong></mark></h1><p id="e952e66c-a2a2-411d-afe0-2b00d9c23f14" class="">
+</p><h1 id="c9324515-0266-4252-86bc-8a4cc7f7f7f6" class=""><mark class="highlight-red"><strong>1. Introduction</strong></mark></h1><h2 id="05144dd0-acb7-48f8-acef-0dd7f43e461d" class="">Most of the collection API classes throw this exception such as ArrayList, HashMap, LinkedList classes.</h2><h2 id="5a0e88c3-0f8c-4965-8cc3-5a107e452834" class=""><mark class="highlight-red_background"><strong>The main reason to throw this exception</strong></mark><strong> if any list or map is modified(by adding or removing) when a loop list or map </strong>after the iterator has been created or during iteration process <mark class="highlight-pink_background">by iterator or forEach</mark><strong>.</strong></h2><h2 id="e47d543c-2bc8-40f1-9fc9-769f53f44848" class=""><strong>If the collection is modified when it is looped over Iterator</strong>, <em><strong>iterator.next() </strong></em>will thorough <em><strong>ConcurrentModificationException </strong></em>exception.</h2><p id="f0a1a277-ab36-4f45-84d3-8f099e12833f" class="">
+</p><h2 id="f65f2617-abf3-473c-a062-7541fb8bd060" class="">This exception mainly comes into existence in the multithreaded environment. If any collection produces this exception then it is fail-fast and should not be used by multiple threads.</h2><p id="8245cfe5-0b67-409c-bfe0-9defa629b976" class="">
+</p><h1 id="46a072d3-d289-447b-baca-872a3861cf4c" class=""><mark class="highlight-red_background"><strong>2. ConcurrentModificationException By Single Thread</strong></mark></h1><h2 id="1256fa35-0348-41fc-9872-4547a34d5877" class=""><mark class="highlight-yellow_background"><strong>With hashMap:</strong></mark></h2><pre id="f615e0b8-bf51-437d-b152-b5661d422ef5" class="code code-wrap"><code>public static void main(String[] args) {
+        Map&lt;String, String&gt; map = new HashMap&lt;&gt;();
+        map.put(&quot;name&quot;, &quot;baeldung&quot;);
+        map.put(&quot;type&quot;, &quot;blog&quot;);
+
+        Set&lt;String&gt; keys = map.keySet();
+        Iterator&lt;String&gt; it = keys.iterator();
+
+        while (it.hasNext()) {
+            String key = it.next();
+            if(key.equals(&quot;name&quot;)) map.remove(key);
+        }
+        map.forEach((k, v) -&gt; System.out.println(v));
+    }</code></pre><h1 id="fe73ecc1-7675-4022-af3f-cefd5092f946" class=""><mark class="highlight-red_background"><strong>3. Exact Reason To ConcurrentModificationException</strong></mark></h1><p id="fd5e5351-51dc-4ad9-a85f-495cdce5fa50" class=""><strong>Along with the size, Collection API maintains another private instance variable &quot;modCount&quot;. Hashmap maintains modCount value </strong><mark class="highlight-yellow_background"><strong>(transient int modCount;)</strong></mark><strong> always the same as size.</strong></p><p id="936c86b9-7bb4-4ab3-b08a-86a2da8ebeae" class=""><strong>Let us consider the above example.</strong></p><p id="124b0996-7ab1-4deb-a0a1-b3eef3eaba33" class=""><strong>After adding </strong><mark class="highlight-teal_background"><strong>put(&quot;name&quot;, &quot;baeldung&quot;) and  map.put(&quot;type&quot;, &quot;blog&quot;)</strong></mark> <strong>values, the size will be 2 and modCount will be 2.</strong></p><p id="9bdea2d6-4d80-4ce6-a830-5cf493185ef6" class=""><strong>Invoke iterator() method on the map as map.iterator() and that returns an Iterator instance.</strong></p><p id="1c17d761-4edf-42b9-aa82-772cf0c38fe7" class=""><strong>The iterator class has its own variable that stores map modCount value. Here, Iterators stores expectedModCount as size 2.</strong></p><p id="595ca682-45ae-41ae-8926-1f2e3a0ecc2d" class=""><strong>When a value in the hashmap is removed,  lhasjmap modCount will be modified and iterator expectedModCount will be different as below.</strong></p><p id="a3d6960a-4af5-4514-86e0-d51f4af9a8d0" class=""><strong><code>modCount = 1;
+expectedModCount = 2;</code></strong></p><p id="5c4d775e-d30c-4eec-ba22-e41b86bbddf5" class="">
+</p><p id="b73197a4-53d6-4ae2-8c5a-bc88a90e67ba" class=""><mark class="highlight-yellow_background"><strong>look at HashIterator nested class on HashMap Class:</strong></mark></p><pre id="93050106-c842-498b-b583-b11a620a501d" class="code code-wrap"><code>
+transient int modCount;
+
+abstract class HashIterator {
+        Node&lt;K,V&gt; next;        // next entry to return
+        Node&lt;K,V&gt; current;     // current entry
+        int expectedModCount;  // for fast-fail
+        int index;             // current slot
+
+        HashIterator() {
+            expectedModCount = modCount;
+            Node&lt;K,V&gt;[] t = table;
+            current = next = null;
+            index = 0;
+            if (t != null &amp;&amp; size &gt; 0) { // advance to first entry
+                do {} while (index &lt; t.length &amp;&amp; (next = t[index++]) == null);
+            }
+        }
+
+        public final boolean hasNext() {
+            return next != null;
+        }
+
+        final Node&lt;K,V&gt; nextNode() {
+            Node&lt;K,V&gt;[] t;
+            Node&lt;K,V&gt; e = next;
+            if (modCount != expectedModCount)
+                throw new ConcurrentModificationException(); // Hereeeeee
+            if (e == null)
+                throw new NoSuchElementException();
+            if ((next = (current = e).next) == null &amp;&amp; (t = table) != null) {
+                do {} while (index &lt; t.length &amp;&amp; (next = t[index++]) == null);
+            }
+            return e;
+        }
+
+        public final void remove() {
+            Node&lt;K,V&gt; p = current;
+            if (p == null)
+                throw new IllegalStateException();
+            if (modCount != expectedModCount)
+                throw new ConcurrentModificationException(); // Hereeeeee
+            current = null;
+            removeNode(p.hash, p.key, null, false, false);
+            expectedModCount = modCount;
+        }
+    }
+
+final class KeyIterator extends HashIterator
+        implements Iterator&lt;K&gt; {
+        public final K next() { return nextNode().key; } // Hereeeeee
+    }
+
+    final class ValueIterator extends HashIterator
+        implements Iterator&lt;V&gt; {
+        public final V next() { return nextNode().value; } // Hereeeeee
+    }
+
+    final class EntryIterator extends HashIterator
+        implements Iterator&lt;Map.Entry&lt;K,V&gt;&gt; {
+        public final Map.Entry&lt;K,V&gt; next() { return nextNode(); } // Hereeeeee
+    }
+
+// Now, it.next() checks internally always modCount and expectedModCount should be same but in our case now it is different
+// and will throw ConcurrentModificationException.</code></pre><h1 id="62e5caa1-21b5-4cff-999f-980b0b494590" class=""><mark class="highlight-red_background"><strong>How to Avoid ConcurrentModificationException in Single Or Multi-Threaded Env.</strong></mark></h1><h2 id="0fda4b76-62ce-4089-9bf9-0e5bf10bd2ca" class=""><strong>To avoid the ConcurrentModificationException exception, We need to use a synchronized block or convert List to Array to iterate or should use CopyOnWriteArrayList, ConcurrentHashMap classes work in the concurrent atmosphere.</strong></h2><p id="c83b6166-3aa5-4ad4-b2c4-3ea91f577118" class="">
+</p><h2 id="e49dbe1d-579a-4e57-b443-c4e9cbfb8a2e" class=""><mark class="highlight-red_background"><strong>1- CopyOnWriteArrayList Example:</strong></mark></h2><pre id="5073666d-2efe-4175-a68b-dd56e050b5a6" class="code code-wrap"><code>public static void main(String[] args) {
+        List&lt;Integer&gt; numbers = new CopyOnWriteArrayList&lt;&gt;();
+
+        numbers.add(100);
+        numbers.add(200);
+        numbers.add(300);
+        numbers.add(400);
+        numbers.add(500);
+
+        Iterator&lt;Integer&gt; safeIterator = numbers.iterator();
+
+        while (safeIterator.hasNext()) {
+
+            int n = safeIterator.next();
+
+            if (n &gt; 300) {
+                numbers.add(n + 1);
+            }
+            System.out.print(n + &quot; &quot;);
+
+        }
+
+        System.out.println(&quot;\nModifed list : &quot; + numbers);
+    }
+
+run:
+100 200 300 400 500 
+Modifed list : [100, 200, 300, 400, 500, 401, 501]</code></pre><h2 id="46e474cd-1524-4fdd-bd3d-5a4243c588ed" class=""><mark class="highlight-red_background"><strong>2 - ConcurrentHashMap Example</strong></mark></h2><pre id="4356dc2b-6586-4ddb-b2f3-2e9bcb1dbe62" class="code code-wrap"><code>public static void main(String[] args) {
+        Map&lt;Integer, String&gt; numbers = new ConcurrentHashMap&lt;&gt;();
+
+        numbers.put(1, &quot;One&quot;);
+        numbers.put(2, &quot;Two&quot;);
+        numbers.put(3, &quot;Three&quot;);
+        numbers.put(4, &quot;Four&quot;);
+
+        Iterator&lt;Integer&gt; safeIterator = numbers.keySet().iterator();
+
+        while (safeIterator.hasNext()) {
+
+            int n = safeIterator.next();
+
+            if (n &gt; 2) {
+                numbers.put(n + 100, &quot;Modified&quot;);
+            }
+            System.out.print(n + &quot; &quot;);
+
+        }
+
+        System.out.println(&quot;\nModifed list : &quot; + numbers.keySet());
+    }
+
+run:
+1 2 3 4 103 104 203 204 303 
+Modifed list : [304, 1, 2, 3, 403, 4, 103, 104, 203, 204, 303]</code></pre><p id="7f4d6532-55bd-4d73-8150-bb2b4f8d6cc1" class="">
+</p><h1 id="0aca9557-a51b-4c71-9fbd-541add35b2ab" class=""><mark class="highlight-red_background">Final Note:</mark></h1><h2 id="2c0d63eb-92ae-45c2-942d-50b8920a33b8" class="">The final thing to remember about these collection views is the performance of iterations. This is where a hash map performs quite poorly compared with its counterparts linked hash map and tree map.</h2><h2 id="4bca981e-8e88-4b8d-be98-76477712ccd0" class="">Iteration over a hash map happens in <mark class="highlight-yellow_background">worst case </mark><mark class="highlight-yellow_background"><em>O(n)</em></mark> where n is the sum of its capacity and the number of entries.</h2><hr id="65c233d3-1cd1-4603-852c-917cb7e4e6e7"/><h1 id="6cbe3071-df3a-483b-80ab-a4c86e9d4429" class="">Section 7:<mark class="highlight-red_background"> </mark><mark class="highlight-red_background"><em><strong><strong>HashMap Performance: </strong></strong></em></mark></h1><p id="784f78aa-71bd-4b5d-98d4-e8e220d4616b" class="">
+</p><p id="f72c3b4b-0889-4217-866c-f766999f734f" class=""><em><strong><strong>There are two factors which affect the performance of the hashmap.</strong></strong></em></p><ul id="0ac5c3d5-d6a4-4e0e-a74c-09e7da957db7" class="bulleted-list"><li style="list-style-type:disc"><strong>Initial Capacity</strong></li></ul><ul id="b9d24253-41fc-4b9f-8be5-e9daf5df966e" class="bulleted-list"><li style="list-style-type:disc"><strong>Load Factor</strong></li></ul><h3 id="9c262516-94fb-4674-8158-a516625c37d8" class="">We have to choose these two factors very carefully while creating the HashMap object. Load Factor and initial capacity can be configured while we create a constructor of HashMap class, as shown below:</h3><pre id="cc5c67e6-614f-4cb2-b66d-84a67d69fec7" class="code code-wrap"><code>HashMap hm=new HashMap(int initialCapacity, float loadFactor);</code></pre><p id="f8fda66a-02e3-4997-bfa7-9f21fd392440" class="">
+</p><h2 id="478739f4-9f06-4e63-a8e2-6078227b6c20" class=""><mark class="highlight-red_background"><strong>Initial Capacity of HashMap:</strong></mark></h2><h3 id="d09dd035-6423-4d9f-acb1-8d1326120ee5" class="">The initial capacity of the HashMap is the number of <strong>buckets </strong>in the hash table. It creates when we create the object of HashMap class. The initial capacity of the HashMap is <strong>2^4 = 16</strong>. The capacity of the HashMap is <strong>doubled </strong>each time it reaches the threshold. The capacity is increased to <strong>2^5=32, 2^6=64</strong>, and so on.</h3><p id="340e2c9f-cbeb-46c2-9393-901d409eda7d" class="">
+</p><h3 id="a61948a6-f6da-4cd1-a772-6d696e685031" class="">Suppose we have implemented the hashCode() method, which makes sure that key-value pair will be distributed among 16 buckets equally.</h3><p id="853ff7b2-e0a3-465e-84d9-99ac06896d1a" class="">
+</p><h3 id="c26d8568-7199-4350-b70c-1536b2650c53" class=""><mark class="highlight-orange_background">Consider the following scenarios:</mark></h3><h3 id="90c1676a-6af4-4660-9410-171b35376195" class="">If there are <strong>16</strong> elements in the HashMap, the hashCode() method will distribute <strong>one</strong> element in each bucket. The searching for any item, in this case, will take the <strong>only</strong> lookup.</h3><h3 id="b067e727-e70b-4c4c-8743-839169ae3cd6" class="">If there are <strong>32</strong> elements in the HashMap, the hashCode() method will distribute <strong>two</strong> elements in each bucket. The searching for any item, in this case, will take the maximum of <strong>two</strong> lookups.</h3><h3 id="016ee825-87e8-46ac-91d6-0d17c00b8ca4" class="">Similarly, if there are <strong>128</strong> elements in HashMap, the hashCode() method will distribute <strong>eight</strong> elements in each bucket. The searching for any item, in this case, will take the maximum <strong>eight</strong> lookups.</h3><h3 id="2f45ca9d-d971-4361-97ec-ee39415ca74a" class="">We can observe from the above scenarios that the number of items in HashMap is <strong>doubled</strong>. The maximum lookup time in each bucket is not increasing very high and remain almost <strong>constant</strong>.</h3><h3 id="172bcab7-a7a3-4611-a45c-60b822f47da5" class=""><mark class="highlight-red"><strong>Alternatively</strong></mark>, the hashmap grows in the power of <strong>2n</strong> and keep on growing when starting point it reached its limit.</h3><p id="a79c79f6-23d6-4887-810a-355e083acebe" class="">
+</p><p id="f51ecd89-fb9f-4610-8410-c38389762c54" class="">
+</p><h2 id="13472a68-04f0-44a7-a1ef-c595ba28c470" class=""><mark class="highlight-red_background"><strong>Load Factor:</strong></mark></h2><h3 id="8245833a-da27-4bb0-af68-81b1df2d9cd7" class="">The Load factor is a measure that decides when to <strong>increase</strong> the HashMap capacity to maintain the get() and put() operation complexity of <strong>O(1)</strong>. The default load factor of HashMap is <strong>0.75f</strong> (75% of the map size).</h3><h3 id="48656425-4b8f-4c95-badd-6fbb87dc1687" class=""><mark class="highlight-yellow_background"><strong>Problem</strong></mark></h3><h3 id="aa1ed2e2-bef3-4e62-9786-47e41e94e7ff" class="">The problem is, keeping the bucket size fixed (i.e., 16), we keep on increasing the total number of items in the map that disturbs time complexity.</h3><h3 id="ef0e6112-2b62-495a-b2a0-8cc320dc41a8" class=""><mark class="highlight-yellow_background"><strong>Solution</strong></mark></h3><h3 id="c0f73bbb-8bda-46ec-bd14-0149722f0f03" class="">When we increase the total number of buckets, total items in each bucket starts increasing. Now we are able to keep the constant number of items in each bucket and maintain the time complexity of O(1) for get() and put() operation.</h3><p id="3cddb01e-144b-471c-89ad-c57c42abbd86" class="">
+</p><h2 id="ddbbb44b-41f9-46ab-92fc-da111bd98143" class=""><mark class="highlight-red_background"><strong>How Load Factor is calculated:</strong></mark></h2><h3 id="1454c7e7-09a7-4b09-96ff-85540c2df9e6" class=""><strong>Load Factor decides &quot;when to increase the number of buckets.&quot;</strong></h3><h3 id="dfa4aaa4-8487-4004-838d-d2b402c737c5" class="">We can find when to increase the hashmap size by using the following formula:</h3><pre id="8274e3a5-6c7c-42c2-8675-d6ba07af4448" class="code code-wrap"><code>initial capacity of the hashmap*Load factor of the hashmap.</code></pre><h3 id="97f29558-a389-427a-b7bf-05855d2a0b95" class=""><strong>The initial capacity of hashmap is=16The default load factor of hashmap=0.75 According to the formula as mentioned above: 16*0.75=12</strong></h3><h3 id="dfb17121-8c96-4d9b-ae02-ec7e4274d38c" class="">It represents that 12th key-value pair of hashmap will keep its size to 16. As soon as 13th element (key-value pair) will come into the Hashmap, it will increase its size from default <strong>2</strong><strong>4</strong><strong> = 16</strong> buckets to <strong>2</strong><strong>5</strong><strong> = 32</strong> buckets.</h3><p id="8dfe8b45-fa5c-45d9-a6df-948fa0256ff1" class="">
+</p><h2 id="672ff6b7-f1cc-4f0d-bc7b-6a09a297fbca" class=""><mark class="highlight-red">Important Note:</mark></h2><h3 id="92331657-5a46-457f-9d50-7cd54ff2e580" class="">When the number of hash map entries exceeds the product of LF and capacity, then <strong>rehashing</strong> occurs i.e. <strong>another internal array is created with twice the size of the initial one and all entries are moved over to new bucket locations in the new array</strong>.</h3><h3 id="d2618325-9d6c-4a93-91d1-33a8c8ce45d5" class=""><mark class="highlight-yellow_background">A</mark><mark class="highlight-yellow_background"><strong> low initial capacity</strong></mark><mark class="highlight-yellow_background"> reduces space cost but </mark><mark class="highlight-yellow_background"><strong>increases the frequency of rehashing</strong></mark><mark class="highlight-yellow_background">.</mark> Rehashing is obviously a very expensive process. So as a rule,<mark class="highlight-red_background"> if you anticipate many entries, you should set a considerably high initial capacity.</mark></h3><h3 id="fc125e8c-b607-45ce-8e0e-bb263eb57b67" class="">On the flip side, if you set the initial capacity too high, you will pay the cost in iteration time. As we saw in the previous section.</h3><h3 id="d925300e-06f3-4885-8ade-35827b9106d4" class=""><mark class="highlight-red">So </mark><mark class="highlight-red"><strong>a high initial capacity is good for a large number of entries coupled with little to no iteration</strong></mark><mark class="highlight-red">.</mark></h3><h3 id="722a1bee-0b02-4b8a-803b-72e733ad1619" class=""><mark class="highlight-red">A </mark><mark class="highlight-red"><strong>low initial capacity is good for few entries with a lot of iteration</strong></mark><mark class="highlight-red">.</mark></h3><hr id="bb1ebfe0-aa78-4ebe-8427-e0ca053df3ee"/><p id="d91e3e93-ebc0-4e0d-a49c-b133c13186b2" class="">
+</p><h1 id="7a6cb983-669e-45f2-b3e8-4211482e1c35" class="">Section 8: <mark class="highlight-red_background"><strong><strong>Differences Between </strong></strong></mark><mark class="highlight-red_background"><em><strong><strong>Hashtable</strong></strong></em></mark><mark class="highlight-red_background"><strong><strong> and </strong></strong></mark><mark class="highlight-red_background"><em><strong><strong>HashMap:</strong></strong></em></mark></h1><p id="5de4fd72-2294-4dc3-ba03-d2b97e2ba6d5" class="">
+</p><h2 id="d194e042-8971-4165-a798-b6525a568590" class=""><mark class="highlight-red_background">1 : </mark><mark class="highlight-red_background"><em><strong><strong>Hashtable</strong></strong></em></mark><mark class="highlight-red_background"><strong><strong> and </strong></strong></mark><mark class="highlight-red_background"><em><strong><strong>HashMap</strong></strong></em></mark><mark class="highlight-red_background"><strong><strong> in Java:</strong></strong></mark></h2><h3 id="8fd7de96-797a-415e-9667-ac984cc7e6c7" class=""><em>Hashtable</em> and <em>HashMap</em> are quite similar – both are collections that implement the <em>Map</em> interface.</h3><h3 id="ea17ce42-f414-4f9b-b83f-3215ac0a8fab" class="">Also, the <em>put()</em>, <em>get()</em>, <em>remove()</em>, and <em>containsKey()</em> methods provide constant-time performance O(1). Internally, these methods work based on a general concept of hashing using buckets for storing data.</h3><h3 id="fc0199e5-0d24-4c0a-a432-2cc1539c5f2e" class="">Neither class maintains the insertion order of the elements. In other words, the first item added may not be the first item when we iterate over the values.</h3><h3 id="13ed6281-80c7-4006-88f5-fd276fc47a66" class=""><mark class="highlight-red_background">But they also have some differences that make one better than another in some situations:</mark></h3><h3 id="5b4b7851-f7df-4e41-9e50-49887dcda727" class=""><mark class="highlight-yellow_background">1 - </mark><mark class="highlight-yellow_background"><strong><strong>Synchronization:</strong></strong></mark></h3><h3 id="4a60d883-ceb2-4219-888f-ebf79655af35" class="">Firstly, <em><strong>Hashtable</strong></em><strong> is thread-safe</strong> and can be shared between multiple threads in the application.</h3><h3 id="937b5c64-8e86-4597-a121-aaee704f8be9" class="">On the other hand, <em>HashMap</em> is not synchronized and can&#x27;t be accessed by multiple threads without additional synchronization code. We can use <em>Collections.synchronizedMap() </em>to make a thread-safe version of a <em>HashMap</em>. We can also just create custom lock code or make the code thread-safe by using the <em>synchronized</em> keyword.</h3><h3 id="c01e69f6-9f62-4f84-8c93-56b6c3237498" class=""><em>HashMap</em> is not synchronized, therefore it&#x27;s faster and uses less memory than <em>Hashtable</em>. </h3><h3 id="2d8d86ca-8385-432e-b76e-ec0b72bc7cb2" class=""><mark class="highlight-red_background">Generally, unsynchronized objects are faster than synchronized ones in a single threaded application.</mark></h3><p id="c908aa88-61e4-48fe-897b-e4281e3f4e35" class="">
+</p><h3 id="fa3b7904-d3d3-4355-8d21-087bac1e1894" class=""><mark class="highlight-yellow_background">2 - </mark><mark class="highlight-yellow_background"><strong><strong>Null Values:</strong></strong></mark></h3><h3 id="1c5cd4f6-4e63-404f-96eb-496aa62b2497" class=""><em>HashMap </em>allows adding one <em>Entry </em>with <em>null </em>as key as well as many entries with <em>null </em>as value.</h3><h3 id="afad6316-77a9-4348-a673-13256b2287e8" class=""><mark class="highlight-red_background"> In contrast, </mark><mark class="highlight-red_background"><em><strong>Hashtable</strong></em></mark><mark class="highlight-red_background"><strong> doesn&#x27;t allow </strong></mark><mark class="highlight-red_background"><em><strong>null</strong></em></mark><mark class="highlight-red_background"><strong> at all.</strong></mark></h3><p id="0efbf015-85fd-4e70-933d-86eb1f672731" class="">
+</p><pre id="01c097b8-5f4a-4bae-87da-f34ab92c1cb4" class="code code-wrap"><code>public static void main(String[] args) {
+        Map&lt;MyKey, String&gt; map = new Hashtable&lt;&gt;();
+        map.put(null, &quot;khaled&quot;); // NullPointerException
+        map.put(new MyKey(0, &quot;key&quot;), null); // NullPointerException
+    }</code></pre><p id="3a7ab428-d82d-4d6a-92c5-dfebd925decc" class="">
+</p><h2 id="9d9e1d6b-3a92-4b54-be3d-124ea6c2cc09" class=""><mark class="highlight-yellow_background">3 - </mark><mark class="highlight-yellow_background"><strong><strong>Iteration Over Elements:</strong></strong></mark></h2><h3 id="03c20f07-ae4b-4952-864e-a556b7eafe19" class=""><em>HashMap </em>uses <mark class="highlight-red"><em>Iterator</em></mark><mark class="highlight-red"><a href="https://www.baeldung.com/java-iterator"> </a></mark><mark class="highlight-red"> </mark>to iterate over values, whereas <em>Hashtable </em>has <mark class="highlight-red"><em>Enumerator </em></mark>for the same.</h3><table id="b79c57ae-da7f-49ad-9934-e55384f2dab5" class="simple-table"><thead><tr id="cabb64c5-0c07-4f48-8405-c851335bea02"><th id="JdBm" class="simple-table-header"><strong>Key</strong></th><th id="UFlv" class="simple-table-header"><strong>Iterator</strong></th><th id="hgM^" class="simple-table-header"><strong>Enumeration</strong></th></tr></thead><tbody><tr id="c3ba3da9-9ac5-4a15-bb70-3eb810ad9ece"><td id="JdBm"><mark class="highlight-red"><strong>Definition</strong></mark></td><td id="UFlv"><strong>Iterator is the interface and found in the java.util package.</strong></td><td id="hgM^"><strong>Enumeration is also an interface and found in the </strong><mark class="highlight-red"><strong>java.util package</strong></mark><strong> . It is used for passing through a collection, usually of unknown size.</strong></td></tr><tr id="ed6166bf-b468-4655-aedf-0d05b00a8ca3"><td id="JdBm"><mark class="highlight-red"><strong>JDK</strong></mark></td><td id="UFlv"><strong>Iterator was added in  JDK.1.2 version in the collection framework.</strong></td><td id="hgM^"><strong>Enumeration was added in JDK1.0</strong></td></tr><tr id="687742b2-73e9-499c-81bc-57437dc83616"><td id="JdBm"><mark class="highlight-red"><strong>Basic</strong></mark></td><td id="UFlv"><strong>Iterators allow the caller to remove elements from the underlying collection during the iteration with well-defined semantics.</strong></td><td id="hgM^"><strong>Enumeration is used for read only access while Iterator is useful to manipulate the list.</strong></td></tr><tr id="0b1c7eb6-f770-4ea3-b7f0-02b9ac901584"><td id="JdBm"><mark class="highlight-red"><strong>Legacy</strong></mark></td><td id="UFlv"><strong>Iterator is not a legacy interface. Iterator can be used for the traversal of HashMap, LinkedList, ArrayList, HashSet, TreeMap, TreeSet .</strong></td><td id="hgM^"><strong>Enumeration is a legacy interface which is used for traversing Vector, Hashtable.</strong></td></tr><tr id="b5620dfe-9525-42e5-983e-20c01d9179bf"><td id="JdBm"><mark class="highlight-red"><strong>Fail-Fast and Fail -Safe</strong></mark></td><td id="UFlv"><strong>Any changes in the collection, such as removing element from the collection during a thread is iterating collection then it throw concurrent modification exception.</strong></td><td id="hgM^"><strong>Enumeration is Fail safe in nature. It doesn’t throw concurrent modification exception</strong></td></tr><tr id="a381d81d-6623-4295-a7e5-5cc1c37eb59b"><td id="JdBm"><mark class="highlight-red"><strong>Methods</strong></mark></td><td id="UFlv"><strong>hasNext(), next(), remove()</strong></td><td id="hgM^"><strong>hasMoreElements(), nextElement()</strong></td></tr></tbody></table><h1 id="8b6ead14-8564-4e2a-8b9e-8c94be7ffaf6" class="">Section 9: <mark class="highlight-red_background">let’s understand Fail Fast Vs Fail Safe Iterator In Java.</mark></h1><h2 id="54e680c3-4ebb-4735-a81a-0b4340d1d9f6" class="">Before we discuss in detail about fail safe iterator and fail fast iterator in addition to  their comparison , we should understand the term <em>Concurrent Modification:</em></h2><h2 id="f6497d15-e5e1-4b15-a966-dced0e1fd96c" class=""><mark class="highlight-yellow_background"><strong>What is Concurrent Modification ?</strong></mark></h2><h3 id="fd377f64-8297-48ef-84e5-b5c41c5ba62c" class="">When one or more thread is iterating over the collection, in between, one thread changes the structure of the collection (either adding the element to the collection or by deleting the element in the collection or by updating the value at particular position in the collection) is known as Concurrent Modification.</h3><p id="11da004f-5fe2-4877-b717-4600b0f050c6" class="">
+</p><h2 id="fe88d010-0bed-47a7-a3c2-674cc339968e" class=""><mark class="highlight-yellow_background"><strong>Difference between Fail Fast iterator and Fail Safe iterator:</strong></mark></h2><h2 id="7279ce54-e5e7-4906-9412-77e6f559114e" class=""><mark class="highlight-orange_background">1 - </mark><mark class="highlight-orange_background"><strong>Fail fast Iterator:</strong></mark></h2><h3 id="681d885a-502c-4c45-bd94-255f09825346" class="">Fail fast iterator while iterating through the collection , instantly throws Concurrent Modification Exception if there is structural modification of the collection . Thus, in the face of concurrent modification, the iterator fails quickly and cleanly, rather than risking arbitrary, non-deterministic behavior at an undetermined time in the future.</h3><h3 id="9ddf793d-f51b-44d2-969b-c360b2db6264" class="">Fail-fast iterator can throw ConcurrentModificationException in two scenarios :</h3><ul id="5b5c2db8-f614-48be-b366-a6d8e945a3ce" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-yellow_background"><strong><em>Single Threaded Environment:</em></strong></mark><mark class="highlight-red"><strong><em> After the creation of the iterator , structure is modified at any time by any method other than iterator&#x27;s own remove method.</em></strong></mark></li></ul><ul id="a737a3cf-4c6c-423a-94cd-098166a450b8" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-yellow_background"><strong><em>Multiple Threaded Environment:</em></strong></mark><mark class="highlight-red"><strong><em> If one thread is modifying the structure of the collection while other thread is iterating over it .</em></strong></mark></li></ul><h2 id="3066d94a-95ef-47b7-a69c-cb4e039c1031" class="">According to  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html">Oracle docs</a>, <strong>the fail-fast behavior of an iterator cannot be guaranteed </strong>as it is, generally speaking, impossible to make any hard guarantees in the presence of unsynchronized concurrent modification.</h2><h3 id="90360776-0a2e-462a-910f-1bcb10b93866" class=""> Fail-fast iterators throw ConcurrentModificationException on a best-effort basis.</h3><h3 id="6bd7eddf-05fe-48fb-9483-3fcdd1c578c4" class="block-color-red_background"> Therefore, it would be wrong to write a program that depended on this exception for its correctness:<strong> the fail-fast behavior of iterators should be used only to detect bugs.</strong></h3><h2 id="f8a32fae-bb03-4fee-8102-1bbc6cdf93a0" class="">Q/ <strong>How  Fail  Fast Iterator  come to know that the internal structure is modified ?</strong></h2><h3 id="0a6d1645-e1a2-4f32-9331-476a81033544" class="">A/ It was explained above in the section 6.</h3><p id="5b18303c-3e45-4d6e-bdee-d0f30a809e9a" class="">
+</p><pre id="657f2aff-4da1-4dba-8ac2-224037d615e3" class="code code-wrap"><code>public class FailFastExample
+{
+    
+    
+    public static void main(String[] args)
+    {
+        Map&lt;String,String&gt; premiumPhone = new HashMap&lt;String,String&gt;();
+        premiumPhone.put(&quot;Apple&quot;, &quot;iPhone&quot;);
+        premiumPhone.put(&quot;HTC&quot;, &quot;HTC one&quot;);
+        premiumPhone.put(&quot;Samsung&quot;,&quot;S5&quot;);
+        
+        Iterator iterator = premiumPhone.keySet().iterator();
+        
+        while (iterator.hasNext())
+        {
+            System.out.println(premiumPhone.get(iterator.next()));
+            premiumPhone.put(&quot;Sony&quot;, &quot;Xperia Z&quot;);
+        }
+        
+    }
+    
+}
+
+run:
+iPhone
+Exception in thread &quot;main&quot; java.util.ConcurrentModificationException
+	at java.base/java.util.HashMap$HashIterator.nextNode(HashMap.java:1584)
+	at java.base/java.util.HashMap$KeyIterator.next(HashMap.java:1607)
+	at student.pre.MyKey.main(MyKey.java:77)</code></pre><hr id="9a234770-d207-44d2-9783-62e02bb74479"/><h2 id="7a0d5c09-f1f4-4342-b818-8046d18a061c" class=""><mark class="highlight-orange_background">2- </mark><mark class="highlight-orange_background"><strong>Fail Safe Iterator:</strong></mark></h2><h3 id="964995b6-79fa-4276-abb8-1458adce22ce" class="">Fail Safe Iterator makes copy of the internal data structure (object array) and iterates over the copied data structure.Any structural modification done to the iterator affects the copied data structure. So , original data structure remains structurally unchanged .Hence , no ConcurrentModificationException throws by the fail safe iterator.</h3><p id="01efd457-c066-4025-898f-99559d702f52" class="">
+</p><h3 id="7c8ec2d4-7264-4e0c-866b-573b7b709b84" class=""><mark class="highlight-red_background">Two  issues associated with Fail Safe Iterator are :</mark></h3><h3 id="3070e460-e576-49f8-bd59-41b0ce78007c" class="">1. Overhead of maintaining the copied data structure i.e memory.</h3><h3 id="2577af07-2ea6-4855-ba84-85b861f15c63" class="">2.  Fail safe iterator does not guarantee that the data being read is the data currently in the original data structure.</h3><h3 id="58cb08cb-b1b5-465e-bb4a-b85fc83cb5ba" class=""><mark class="highlight-red_background">According to </mark><mark class="highlight-red_background"><a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CopyOnWriteArrayList.html">Oracle docs</a></mark><mark class="highlight-red_background">,</mark> fail safe iterator is ordinarily too costly, but may be more efficient than alternatives when traversal operations vastly outnumber mutations, and is useful when you cannot or don’t want to synchronize traversals, yet need to preclude interference among concurrent threads. The &quot;snapshot&quot; style iterator method uses a reference to the state of the array at the point that the iterator was created.</h3><h3 id="a4ed9682-ea1a-4c73-869d-d2b56667450c" class=""> This <strong>array never changes during the lifetime of the iterator, so interference is impossible and the iterator is guaranteed not to throw ConcurrentModificationException</strong>.</h3><h3 id="60804ba9-e081-4c9d-946d-d385a39df981" class="">The iterator will not reflect additions, removals, or changes to the list since the iterator was created. Element-changing operations on iterators themselves (remove(), set(), and add()) are not supported. These methods throw UnsupportedOperationException.</h3><pre id="b6013821-300a-4ed7-8461-b37271efd65d" class="code code-wrap"><code>public static void main(String[] args) {
+        ConcurrentHashMap&lt;String,String&gt; premiumPhone = new ConcurrentHashMap&lt;&gt;();
+        premiumPhone.put(&quot;Apple&quot;, &quot;iPhone&quot;);
+        premiumPhone.put(&quot;HTC&quot;, &quot;HTC one&quot;);
+        premiumPhone.put(&quot;Samsung&quot;,&quot;S5&quot;);
+        
+        Iterator iterator = premiumPhone.keySet().iterator();
+        
+        while (iterator.hasNext())
+        {
+            System.out.println(premiumPhone.get(iterator.next()));
+            premiumPhone.put(&quot;Sony&quot;, &quot;Xperia Z&quot;);
+        }
+    }
+
+run:
+iPhone
+HTC one
+S5</code></pre><p id="2a62dfe8-ea49-414c-8af1-f5299fbd4619" class="">
+</p><hr id="5b691081-8a66-429e-89cd-b4856c6b692e"/><h1 id="0d1a9074-baa3-4a24-be0d-353d859f58ed" class="">Section 10: <mark class="highlight-red_background">Common Questions</mark></h1><h1 id="7cab2493-d418-4991-9f06-77e136db41db" class=""><mark class="highlight-red_background"><strong>Question 1 : Why we need Enumeration  instead of  for(int i=0; i&lt; v.size();i++){} loop?</strong></mark></h1><p id="1d12f6d4-cfbf-4495-8760-7525ccf142c1" class="">
+</p><h2 id="a6c87337-d37a-4947-adbe-7cea4fd37736" class=""><mark class="highlight-red_background">For loops are expensive to the processor when the collection reaches large sizes, as many operations are done just to compute the first line:</mark></h2><h2 id="0a135239-b44c-4b15-9236-108451d0bbdd" class=""><mark class="highlight-yellow_background"><strong>For loop total operations :</strong></mark></h2><h2 id="8808c034-a5b9-4474-b96b-74fd11c07bee" class="">1 - int i = 0 is an assignment and creation (2 operations)</h2><h2 id="0fc98e57-0a77-453c-a563-fef89c614697" class="">2 - i get size, check value of i, and compare (3 operations)</h2><h2 id="6926ef8a-dc65-4fd0-9e89-a369ad18316e" class="">3 - i++ gets i then adds 1 to it [++i is only 2 operations] this one (3 operations)</h2><h2 id="1e06f444-4fe9-4da5-a1a0-e1190da4e6fa" class=""><mark class="highlight-red">total: </mark><mark class="highlight-red"><strong>7/8 operations in total, each time the loop runs through.</strong></mark></h2><hr id="88aba59f-71eb-479c-943d-da975e78999f"/><h2 id="4545572c-c2bb-4bb4-b4a5-8514e1f1f136" class=""><mark class="highlight-yellow_background"><strong>Enumeration total operations :</strong></mark></h2><h2 id="82ee2fc1-b233-41c9-b84b-2d20631b01c0" class=""><strong>where an enumeration or iterator uses a while(){}</strong></h2><h2 id="a8dc7f0b-ed9b-434f-9cea-6f7a3d2ac051" class="">1 - <strong>while(v.hasNext()) has next true or false (1 operation)</strong></h2><h2 id="99a0c288-b7e8-4a3c-837b-995b75ac1078" class="">2 - <strong>while(v.hasMoreElements()) has more true or false (1 operation)</strong></h2><h2 id="676140f1-526d-4076-8cd6-ae9d53e7b95a" class=""><mark class="highlight-red">total: </mark><mark class="highlight-red"><strong>Only one operation per repeat of this loop</strong></mark></h2><h2 id="58b9ecde-2570-4912-b5b7-a38ecdd53da0" class=""><mark class="highlight-red_background"><strong>That&#x27;s why enumeration (or iterator) has been added to the jdk.</strong></mark></h2><hr id="6242157d-b998-41a7-a9df-3b34ab07de2a"/><h1 id="4808497d-6414-4f9e-b11e-417e6c4ce3bb" class=""><mark class="highlight-yellow_background"><strong>Question 2 : When to Choose </strong></mark><mark class="highlight-yellow_background"><em><strong><strong>HashMap</strong></strong></em></mark><mark class="highlight-yellow_background"><strong><strong> Over </strong></strong></mark><mark class="highlight-yellow_background"><em><strong><strong>Hashtable?</strong></strong></em></mark></h1><h2 id="e202705d-b7d1-4aba-8eb4-2ec763627a5b" class="">We should use <em>HashMap</em> for an unsynchronized or single threaded application.</h2><h2 id="7b96e574-948c-49b9-8085-972b385d2dec" class="">It is worth mentioning that since JDK 1.8, <em>Hashtable</em> has been deprecated. However, <a href="https://www.baeldung.com/java-concurrent-map"><em>ConcurrentHashMap</em></a> is a great <em>Hashtable</em> replacement. We should consider <em>ConcurrentHashMap</em> to use in applications with multiple threads.</h2><hr id="9258771e-3ab3-4ecb-88cc-7a94c03f1687"/><h1 id="41541705-0206-4aae-b693-2744cafeb7fc" class="">References:</h1><ul id="a72da7e3-81bc-45bf-a3e4-55af7bf8d946" class="block-color-red bulleted-list"><li style="list-style-type:disc"><strong><a href="http://docs.oracle.com/">docs.oracle.com</a></strong></li></ul><ul id="0e513241-32c0-4e05-8700-a26ff21865c0" class="block-color-red bulleted-list"><li style="list-style-type:disc"><strong><a href="http://javahungry.blogspot.com/">javahungry.blogspot.com</a></strong></li></ul><ul id="e6cf1cd9-892a-4aac-9166-d1622eadfaa4" class="block-color-red bulleted-list"><li style="list-style-type:disc"><strong><a href="http://www.tutorialspoint.com/">www.tutorialspoint.com</a></strong></li></ul><ul id="1fa38996-249b-4006-886e-573fdfeb7c41" class="block-color-red bulleted-list"><li style="list-style-type:disc"><strong><a href="http://www.geeksforgeeks.org/">www.geeksforgeeks.org</a></strong></li></ul><ul id="2cbc3617-d793-4bc7-a9cb-9e5ad4c684f4" class="block-color-red bulleted-list"><li style="list-style-type:disc"><strong><a href="http://www.baeldung.com/">www.baeldung.com</a></strong></li></ul><ul id="e8fc3275-7164-4cee-988f-7282d0690e69" class="block-color-red bulleted-list"><li style="list-style-type:disc"><strong><a href="http://howtodoinjava.com/">howtodoinjava.com</a></strong></li></ul><ul id="b9973c25-624a-4405-86da-dd6e1cfc2775" class="block-color-red bulleted-list"><li style="list-style-type:disc"><strong><a href="http://www.javaprogramto.com/">www.javaprogramto.com</a></strong></li></ul><ul id="8a4f5586-bab7-4376-87cd-2fb18b556642" class="block-color-red bulleted-list"><li style="list-style-type:disc"><strong><a href="http://javarevisited.blogspot.com/">javarevisited.blogspot.com</a></strong></li></ul><ul id="49dec339-ae93-4673-a69b-ffc299d96ec4" class="block-color-red bulleted-list"><li style="list-style-type:disc"><strong><a href="http://www.javatpoint.com/">www.javatpoint.com</a></strong></li></ul><ul id="a4fac660-5e70-4725-94d4-cd1101d06ddd" class="block-color-red bulleted-list"><li style="list-style-type:disc"><strong><a href="http://www.amitph.com/">www.amitph.com</a></strong></li></ul><ul id="b8ccfb3b-6575-4289-bf59-c07d8747069e" class="block-color-red bulleted-list"><li style="list-style-type:disc"><strong><a href="http://www.section.io/">www.section.io</a></strong></li></ul><p id="cac9fcff-9ed8-413f-b3ba-970ebb8834dd" class="">
+</p></div></article></body></html>
